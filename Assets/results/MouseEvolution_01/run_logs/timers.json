@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1775368391",
+        "python_version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\sprak\\MousePredatorSim\\venv\\Scripts\\mlagents-learn mouse_config.yaml --run-id=MouseEvolution_01",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.11.0+cpu",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1775368474"
+    },
+    "total": 82.413770200219,
+    "count": 1,
+    "self": 0.03868180047720671,
+    "children": {
+        "run_training.setup": {
+            "total": 0.12311849975958467,
+            "count": 1,
+            "self": 0.12311849975958467
+        },
+        "TrainerController.start_learning": {
+            "total": 82.25196989998221,
+            "count": 1,
+            "self": 0.007558899931609631,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 82.24425600003451,
+                    "count": 1,
+                    "self": 82.24425600003451
+                },
+                "trainer_threads": {
+                    "total": 4.1997991502285e-06,
+                    "count": 1,
+                    "self": 4.1997991502285e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.0001508002169430256,
+                    "count": 1,
+                    "self": 0.0001508002169430256
+                }
+            }
+        }
+    }
+}
