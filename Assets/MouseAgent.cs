@@ -6,7 +6,8 @@ using Unity.MLAgents.Sensors;
 public class MouseAgent : Agent
 {
     [Header("Agent Stats")]
-    public float moveSpeed = 5f; 
+    // Biologically constrained to ~3.5m/s (max sprint speed of Mus musculus)
+    public float moveSpeed = 3.5f; 
     
     [Header("Environment Links")]
     public HawkBot theHawk; 
@@ -44,7 +45,6 @@ public class MouseAgent : Agent
             if (Random.value > 0.5f)
             {
                 // Scenario A: Spawn inside the Flight Zone (Close enough to survive)
-                // We start at 0.5f so it doesn't spawn literally inside the shelter
                 spawnDistance = Random.Range(0.5f, survivalRadius);
             }
             else
@@ -56,6 +56,11 @@ public class MouseAgent : Agent
             // Pick a random direction, then multiply by our calculated distance
             Vector2 randomDirection = Random.insideUnitCircle.normalized; 
             Vector3 spawnPos = shelter.localPosition + new Vector3(randomDirection.x * spawnDistance, 0f, randomDirection.y * spawnDistance);
+            
+            // --- BOUNDARY CLAMPING ---
+            // Forces the spawn position to stay inside the 8x8 plane boundary
+            spawnPos.x = Mathf.Clamp(spawnPos.x, -8.5f, 8.5f);
+            spawnPos.z = Mathf.Clamp(spawnPos.z, -8.5f, 8.5f);
             
             // Keep the Y value at 0.5f so the mouse doesn't spawn under the floor
             transform.localPosition = new Vector3(spawnPos.x, 0.5f, spawnPos.z);
@@ -76,9 +81,10 @@ public class MouseAgent : Agent
         }
     }
 
-    // THE HIPPOCAMPUS: Feeding data to the Brain
+    // THE HIPPOCAMPUS / RETROSPLENIAL CORTEX: Feeding spatial data to the Brain
     public override void CollectObservations(VectorSensor sensor)
     {
+        // 1 observation
         sensor.AddObservation(rb.linearVelocity.magnitude);
 
         if (shelter != null)
@@ -86,9 +92,12 @@ public class MouseAgent : Agent
             Vector3 directionToShelter = (shelter.position - transform.position).normalized;
             float distanceToShelter = Vector3.Distance(shelter.position, transform.position);
 
+            // 3 observations (X, Y, Z)
             sensor.AddObservation(directionToShelter); 
+            // 1 observation
             sensor.AddObservation(distanceToShelter);  
         }
+        // Total = 5 observations (Make sure Vector Space Size is set to 5 in the Inspector!)
     }
 
     // THE MOTOR CORTEX: Receiving commands from the Brain
@@ -100,42 +109,52 @@ public class MouseAgent : Agent
         Vector3 move = new Vector3(moveX, 0, moveZ);
         rb.linearVelocity = new Vector3(move.x * moveSpeed, rb.linearVelocity.y, move.z * moveSpeed);
 
-        // Energy penalty 
+        // W2 Energy penalty: Punish sprinting
         AddReward(-0.001f * rb.linearVelocity.magnitude);
     }
 
-    // THE TRIGGERS: Death, False Alarms, Escapes, and Food
+    // THE TRIGGERS: Death, False Alarms, and True Escapes
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hawk"))
         {
-            AddReward(-1.0f); // Eaten
+            AddReward(-1.0f); // W1 Death Penalty: Eaten
             EndEpisode();
         }
         else if (other.CompareTag("Shelter"))
         {
             if (theHawk.isDiving == true)
             {
-                AddReward(1.0f);  // TRUE ESCAPE!
+                AddReward(1.0f);  // TRUE ESCAPE! Reward the fast pathway
                 EndEpisode();
             }
             else
             {
-                AddReward(-0.5f); // FALSE ALARM! 
+                AddReward(-0.5f); // W3 False Alarm: Punish running from harmless clouds
                 EndEpisode();
             }
-        }
-        else if (other.CompareTag("Food"))
-        {
-            AddReward(0.05f); // Positive reinforcement for exploring
-            
-            // Instantly teleport the food somewhere else so the mouse has to keep hunting
-            other.transform.localPosition = new Vector3(Random.Range(-8f, 8f), 0.5f, Random.Range(-8f, 8f));
         }
     }
 
     private void FixedUpdate()
     {
+        // --- THE VOID PENALTY ---
+        // If the mouse falls off the plane, kill it instantly
+        if (transform.localPosition.y < -1f)
+        {
+            AddReward(-1.0f);
+            EndEpisode();
+            return; 
+        }
+
+        // --- W5 FORAGING REWARD ---
+        // A continuous trickle of points for grazing out in the open
+        if (shelter != null && Vector3.Distance(transform.position, shelter.position) > 1.5f)
+        {
+            AddReward(0.0005f); 
+        }
+
+        // --- REFLEX LOGIC ---
         // 1. Check if the hawk just started diving
         if (theHawk != null && theHawk.isDiving && !threatDetected)
         {
@@ -152,7 +171,7 @@ public class MouseAgent : Agent
             {
                 hasReacted = true;
                 
-                // W4 Reaction Frames Penalty: e.g., -0.01f per frame of hesitation
+                // W4 Reaction Frames Penalty: Punish the retino-collicular pathway for hesitation
                 AddReward(-0.01f * framesElapsed); 
             }
         }

@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: AgentCamera
   m_TagString: Untagged
@@ -290,7 +291,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -316,7 +317,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 120.00001
+  field of view: 160
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -324,7 +325,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 92333d8ec90c419468149f6ce9790380, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
@@ -342,13 +343,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.13052624, y: 0, z: 0, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0.5, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2088478251}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -15, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +394,27 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282f342c2ab144bf38be65d4d0c4e07d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Sensors.CameraSensorComponent
+  m_Camera: {fileID: 330585545}
+  m_SensorName: CameraSensor
+  m_Width: 128
+  m_Height: 128
+  m_Grayscale: 1
+  m_ObservationType: 0
+  m_RuntimeCameraEnable: 0
+  m_ObservationStacks: 5
+  m_Compression: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +942,7 @@ GameObject:
   - component: {fileID: 1803596015}
   - component: {fileID: 1803596014}
   - component: {fileID: 1803596013}
+  - component: {fileID: 1803596017}
   m_Layer: 0
   m_Name: Hawk
   m_TagString: Hawk
@@ -955,7 +978,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803596012}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1014,12 +1037,31 @@ Transform:
   m_GameObject: {fileID: 1803596012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.31686, y: 0.2218, z: 0.31686}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.31686, y: 10, z: 0.31686}
+  m_LocalScale: {x: 4.8, y: 0.8, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1803596017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803596012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7e398093dd431a4596437e44d19ef2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HawkBot
+  prey: {fileID: 2088478251}
+  cruiseSpeed: 4
+  diveSpeed: 6
+  cruiseAltitude: 10
+  minDiveWait: 3
+  maxDiveWait: 8
+  isDiving: 0
 --- !u!1 &1880206612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,7 +1375,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0.35, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 330585546}
@@ -1371,6 +1413,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   moveSpeed: 20
+  theHawk: {fileID: 1803596017}
+  shelter: {fileID: 990865553}
 --- !u!114 &2088478254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,7 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -1396,7 +1440,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 1
-  m_BehaviorName: My Behavior
+  m_BehaviorName: MouseBrain
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
