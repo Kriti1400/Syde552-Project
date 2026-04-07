@@ -65,4 +65,4 @@ cd kriti-vision
 python train.py
 ```
 
-This will train the model on simulated predator looming data generated from Unity.
+This will train the model on synthetic data generated from a Python script.
