@@ -104,8 +104,8 @@ behaviors:
 To train the mouse visual CNN:
 
 ```bash
-cd kriti-vision
-python train.py
+python v1_generate_dummy_data.py
+python v1_train.py
 ```
 
 This will train the model on synthetic data generated from a Python script.
