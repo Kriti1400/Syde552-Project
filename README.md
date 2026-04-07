@@ -26,7 +26,7 @@ cd Syde552-Project
 
 The project should load with all necessary Unity packages and dependencies.
 
-### 3. Set Up Python Environment (for Vision Model Training)
+### 3. Set Up Python Environment (for Model Training)
 
 If you want to train or modify the vision models:
 
