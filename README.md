@@ -96,7 +96,6 @@ behaviors:
   - `ML-Agents/`: Machine learning agents for training
   - `Scenes/`: Unity scenes
   - `results/`: Training results and configurations
-- `kriti-vision/`: Python code for vision model training
 - `python/`: Additional Python utilities
 
 ## Training the Vision Model
